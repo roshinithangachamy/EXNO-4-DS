@@ -24,6 +24,158 @@ The feature selection techniques used are:
 3.Embedded Method
 
 # CODING AND OUTPUT:
-       # INCLUDE YOUR CODING AND OUTPUT SCREENSHOTS HERE
+
+```
+import pandas as pd
+import numpy as np
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score,confusion_matrix
+data=pd.read_csv('/content/income(1) (1).csv',na_values=[" ?"])
+data
+```
+![image](https://github.com/user-attachments/assets/273ed690-3c9d-4d13-b90c-889d1045743b)
+
+```
+data.isnull().sum()
+```
+![image](https://github.com/user-attachments/assets/b29c513b-8e1a-4edf-991e-4e5180a04682)
+
+```
+missing=data[data.isnull().any(axis=1)]
+missing
+```
+![image](https://github.com/user-attachments/assets/49ac6619-4d50-495b-8157-5f094ca9f16f)
+
+```
+ data2=data.dropna(axis=0)
+ data2
+```
+![image](https://github.com/user-attachments/assets/9ca80531-3bdb-409b-8222-d3e9fa40162d)
+
+```
+sal=data['SalStat']
+data2["SalStat"]=data["SalStat"].map({' less than or equal to 50,000':0,' greater than 50,000':1})
+print(data2['SalStat'])
+```
+![image](https://github.com/user-attachments/assets/90da8d0c-17ee-4972-a3cf-1de6b9584507)
+
+```
+sal2=data2['SalStat']
+dfs=pd.concat([sal,sal2],axis=1)
+dfs
+```
+![image](https://github.com/user-attachments/assets/cf06a3f2-00a9-4b62-ac32-622ba69f2e45)
+
+```
+data2
+```
+
+```
+new_data=pd.get_dummies(data2, drop_first=True)
+new_data
+```
+![image](https://github.com/user-attachments/assets/cf541996-6c63-4cee-8de1-ad07b2ef1ead)
+
+```
+columns_list=list(new_data.columns)
+print(columns_list)
+```
+![image](https://github.com/user-attachments/assets/bd47d21d-1f13-4ed4-bf22-21e65fccc2c1)
+
+```
+features=list(set(columns_list)-set(['SalStat']))
+print(features)
+```
+![image](https://github.com/user-attachments/assets/0c3eb551-8668-4ae1-9d51-956afc712885)
+
+```
+y=new_data['SalStat'].values
+print(y)
+```
+![image](https://github.com/user-attachments/assets/a6db6a8d-cebe-428d-9f8e-0250061047c2)
+
+```
+x=new_data[features].values
+print(x)
+```
+![image](https://github.com/user-attachments/assets/778f0a48-5514-48f9-9d62-9ff39bcfdeac)
+
+```
+train_x,test_x,train_y,test_y=train_test_split(x,y,test_size=0.3,random_state=0)
+KNN_classifier=KNeighborsClassifier(n_neighbors = 5)
+KNN_classifier.fit(train_x,train_y)
+```
+![image](https://github.com/user-attachments/assets/1f11a269-3e36-4b43-b693-d56e9600e886)
+
+```
+prediction=KNN_classifier.predict(test_x)
+confusionMatrix=confusion_matrix(test_y, prediction)
+print(confusionMatrix)
+```
+![image](https://github.com/user-attachments/assets/c29e9377-85ba-4de0-8270-25048e95a95f)
+
+```
+accuracy_score=accuracy_score(test_y,prediction)
+print(accuracy_score)
+```
+![image](https://github.com/user-attachments/assets/3f1604b4-0f74-46f0-84a1-72b471c498be)
+
+```
+print("Misclassified Samples : %d" % (test_y !=prediction).sum())
+```
+![image](https://github.com/user-attachments/assets/dd219b3d-d04f-4453-9f57-b05631d08d32)
+
+```
+data.shape
+```
+![image](https://github.com/user-attachments/assets/8dbbc0d3-24d1-4d19-aa73-00559bf4f61f)
+
+```
+import pandas as pd
+import numpy as np
+from scipy.stats import chi2_contingency
+import seaborn as sns
+tips=sns.load_dataset('tips')
+tips.head()
+```
+![image](https://github.com/user-attachments/assets/a7448405-74ea-4107-a971-8f0496f1eaa8)
+
+```
+contigency_table=pd.crosstab(tips['sex'],tips['time'])
+print(contigency_table)
+```
+![image](https://github.com/user-attachments/assets/b0bec49e-b96c-4194-9494-98bc105d9555)
+
+```
+chi2,p, _, _=chi2_contingency(contigency_table)
+print(f"chi-Square Statistic:{chi2}")
+print(f"P-value:{p}")
+```
+![image](https://github.com/user-attachments/assets/49fb8ab2-2d29-4408-9e37-0a49c3d00513)
+
+```
+import pandas as pd
+from sklearn.feature_selection import SelectKBest, mutual_info_classif, f_classif
+data={
+    'Feature1': [1,2,3,4,5],
+    'Feature2': ['A','B','C','A','B'],
+    'Feature3': [0,1,1,0,1],
+    'Target'  : [0,1,1,0,1]
+}
+df=pd.DataFrame(data)
+x=df[['Feature1','Feature3']]
+y=df[['Target']]
+selector=SelectKBest(score_func=mutual_info_classif,k=1)
+x_new=selector.fit_transform(x,y)
+selected_feature_indices=selector.get_support(indices=True)
+selected_features=x.columns[selected_feature_indices]
+print("Selected Features:")
+print(selected_features)
+```
+
+![image](https://github.com/user-attachments/assets/512b59db-f313-46dd-8ac6-1cde448d5546)
+
 # RESULT:
-       # INCLUDE YOUR RESULT HERE
+         Thus the code to read the given data and perform Feature Scaling and Feature Selection process and save the data to a file is implemented successfully.
